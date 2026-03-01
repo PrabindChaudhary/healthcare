@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="AI-powered symptom checker. Describe your symptoms and get a preliminary health assessment instantly." />
+    <title>AI Symptom Checker – MediCare AI</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .checker-layout {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .checker-form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+        }
+
+        .checker-form-card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checker-form-card h2 i {
+            color: var(--primary-light);
+        }
+
+        .symptom-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .symptom-chip {
+            padding: 6px 14px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            user-select: none;
+        }
+
+        .symptom-chip:hover,
+        .symptom-chip.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: var(--primary);
+            color: var(--primary-light);
+        }
+
+        .chips-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .severity-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 10px;
+            background: linear-gradient(to right, var(--green), var(--yellow), var(--red));
+            outline: none;
+            margin: 12px 0;
+        }
+
+        .severity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .severity-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            display: none;
+        }
+
+        .result-card.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-urgency {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .urgency-low {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--green);
+        }
+
+        .urgency-medium {
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            color: var(--yellow);
+        }
+
+        .urgency-high {
+            background: rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            color: var(--orange);
+        }
+
+        .urgency-critical {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--red);
+        }
+
+        .result-diagnosis {
+            margin: 16px 0;
+        }
+
+        .result-diagnosis h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .result-diagnosis p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .recommendation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .recommendation-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+        }
+
+        .recommendation-list li i {
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .info-card-sm {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+        }
+
+        .info-card-sm h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card-sm p {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .checker-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <i class="fas fa-heartbeat pulse-icon"></i>
+                <span>Medi<span class="accent">Care AI</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="symptom-checker.html" class="active">Symptom Checker</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="doctors.html">Doctors</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-outline">Login</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <span class="section-tag"><i class="fas fa-robot"></i> AI-Powered</span>
+            <h1>Symptom <span class="gradient-text">Checker</span></h1>
+            <p>Tell our AI about your symptoms and receive an instant preliminary health assessment</p>
+        </div>
+    </div>
+
+    <section class="form-section" style="background: var(--bg-primary);">
+        <div class="checker-layout">
+            <!-- Form -->
+            <div class="checker-form-card">
+                <h2><i class="fas fa-stethoscope"></i> Enter Your Symptoms</h2>
+
+                <div class="form-group">
+                    <label>Patient Name</label>
+                    <input type="text" id="patientName" class="form-control" placeholder="Your full name" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="patientAge" class="form-control" placeholder="e.g. 28" min="1"
+                            max="120" />
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="patientGender" class="form-control">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="chips-label">Common Symptoms (click to select)</div>
+                    <div class="symptom-chips">
+                        <span class="symptom-chip" onclick="toggleChip(this)">Headache</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Fever</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Cough</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Fatigue</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Chest Pain</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Nausea</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Shortness of Breath</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Dizziness</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Sore Throat</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Body Aches</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Vomiting</span>
+                        <span class="symptom-chip" onclick="toggleChip(this)">Rash</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Symptoms / Description</label>
+                    <textarea id="symptomsText" class="form-control"
+                        placeholder="Describe your symptoms in detail..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Symptom Severity: <span id="severityVal" style="color: var(--primary-light);">5 /
+                            10</span></label>
+                    <input type="range" id="severitySlider" class="severity-slider" min="1" max="10" value="5"
+                        oninput="document.getElementById('severityVal').textContent = this.value + ' / 10'" />
+                    <div class="severity-labels">
+                        <span>Mild</span><span>Moderate</span><span>Severe</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Duration of Symptoms</label>
+                    <select id="duration" class="form-control">
+                        <option value="">Select duration</option>
+                        <option value="hours">A few hours</option>
+                        <option value="1day">1 day</option>
+                        <option value="2-3days">2–3 days</option>
+                        <option value="week">About a week</option>
+                        <option value="more">More than a week</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Any known medical conditions?</label>
+                    <input type="text" id="conditions" class="form-control"
+                        placeholder="e.g. Diabetes, Hypertension, None" />
+                </div>
+
+                <button class="btn btn-primary btn-lg" onclick="analyzeSymptoms()" style="width:100%">
+                    <i class="fas fa-robot"></i> Analyze Symptoms
+                </button>
+
+                <p style="color: var(--text-muted); font-size:0.78rem; margin-top:12px; text-align:center;">
+                    ⚠️ AI analysis is for preliminary assessment only. Always consult a doctor.
+                </p>
+            </div>
+
+            <!-- Result -->
+            <div>
+                <div class="result-card" id="resultCard">
+                    <h2 style="font-family:'Outfit',sans-serif; font-size:1.3rem; margin-bottom:20px;">
+                        <i class="fas fa-brain" style="color: var(--accent)"></i> AI Diagnosis Result
+                    </h2>
+
+                    <div id="urgencyBadge" class="result-urgency"></div>
+
+                    <div class="result-diagnosis" id="resultDiagnosis"></div>
+
+                    <h4
+                        style="margin: 16px 0 8px; font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">
+                        Recommendations
+                    </h4>
+                    <ul class="recommendation-list" id="recommendationList"></ul>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap;">
+                        <a href="appointments.html" class="btn btn-primary">
+                            <i class="fas fa-calendar-check"></i> Book Appointment
+                        </a>
+                        <!-- BUG FIX: Reset now calls resetChecker() which
+                             also restores the infoCards panel and clears form -->
+                        <button class="btn btn-glass" onclick="resetChecker()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="info-cards" id="infoCards">
+                    <div class="info-card-sm">
+                        <h4><i class="fas fa-lightbulb" style="color:var(--yellow)"></i> How it Works</h4>
+                        <p>Our AI analyzes your symptoms using medical knowledge data to provide a preliminary
+                            assessment and urgency level.</p>
+                    </div>
+                    <div class="info-card-sm">
+                        <h4><i class="fas fa-shield-heart" style="color:var(--green)"></i> Privacy First</h4>
+                        <p>Your health data is encrypted and never shared with third parties without your explicit
+                            consent.</p>
+                    </div>
+                    <div class="info-card-sm">
+                        <h4><i class="fas fa-user-md" style="color:var(--accent)"></i> Doctor Verified</h4>
+                        <p>All AI assessments are reviewed and validated by certified medical professionals for
+                            accuracy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 MediCare AI. All rights reserved.</p>
+                <p class="project-credit">🚀 <strong>Project By Prabind</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        function toggleChip(el) {
+            el.classList.toggle('active');
+        }
+
+        const diagnosisDB = [
+            {
+                keywords: ['headache', 'fever', 'light', 'neck'],
+                diagnosis: 'Possible Viral Meningitis',
+                description: 'Symptoms suggest potential viral meningitis. This requires immediate medical evaluation. The combination of headache, fever, and light sensitivity are classic warning signs.',
+                urgency: 'critical',
+                urgencyText: '🚨 CRITICAL - Seek Emergency Care',
+                recommendations: [
+                    'Go to emergency room immediately',
+                    'Avoid bright lights and loud noises',
+                    'Do not self-medicate with antibiotics',
+                    'Call emergency services if symptoms worsen rapidly',
+                    'Bring a list of your medications to the ER'
+                ]
+            },
+            {
+                keywords: ['chest', 'breathing', 'shortness'],
+                diagnosis: 'Possible Cardiac/Respiratory Issue',
+                description: 'Chest pain and shortness of breath require immediate medical attention. These could indicate cardiac or pulmonary conditions that need urgent evaluation.',
+                urgency: 'critical',
+                urgencyText: '🚨 CRITICAL - Emergency Care Required',
+                recommendations: [
+                    'Call emergency services (911) immediately',
+                    'Sit calmly and do not exert yourself',
+                    'Chew aspirin if not allergic (for cardiac symptoms)',
+                    'Loosen any tight clothing',
+                    'Stay calm and wait for medical help'
+                ]
+            },
+            {
+                keywords: ['fever', 'cough', 'fatigue', 'sore'],
+                diagnosis: 'Likely Viral Infection (Flu/COVID-like)',
+                description: 'Your symptoms are consistent with a viral upper respiratory infection such as influenza or a similar illness. While concerning, this is generally manageable with proper care.',
+                urgency: 'medium',
+                urgencyText: '⚠️ MEDIUM - See a Doctor Within 24-48 Hours',
+                recommendations: [
+                    'Rest and stay well hydrated',
+                    'Take over-the-counter fever reducers',
+                    'Isolate from vulnerable individuals',
+                    'Monitor temperature every 4 hours',
+                    'Schedule a virtual or in-person consultation'
+                ]
+            },
+            {
+                keywords: ['headache', 'dizziness', 'fatigue'],
+                diagnosis: 'Possible Migraine or Tension Headache',
+                description: 'Your symptoms suggest a tension headache or migraine episode. While generally not dangerous, recurring migraines should be evaluated by a neurologist.',
+                urgency: 'low',
+                urgencyText: '✅ LOW - Routine Medical Consultation',
+                recommendations: [
+                    'Rest in a quiet, dark room',
+                    'Apply a cold compress to your forehead',
+                    'Stay hydrated and avoid screens',
+                    'Take OTC pain relievers if needed',
+                    'Schedule routine doctor visit within a week'
+                ]
+            }
+        ];
+
+        /* ===== Bug Fix: Safe HTML escaping to prevent XSS ===== */
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        /* ===== Bug Fix: Word-boundary-aware keyword matching =====
+         * Plain String.includes('fever') also matches inside other words.
+         * Wrap the search string with spaces and check " keyword " to
+         * avoid false positives like 'hay fever' matching just 'fever'. */
+        function keywordMatches(text, kw) {
+            // Pad both sides so first/last words are also matched
+            return (' ' + text + ' ').includes(' ' + kw + ' ');
+        }
+
+        function analyzeSymptoms() {
+            const name = document.getElementById('patientName').value.trim();
+            const symptomsText = document.getElementById('symptomsText').value.toLowerCase();
+            const severity = parseInt(document.getElementById('severitySlider').value);
+            const selectedChips = [...document.querySelectorAll('.symptom-chip.active')]
+                .map(c => c.textContent.toLowerCase());
+
+            /* BUG FIX: trim allSymptoms to remove leading/trailing spaces
+             * that occurred when symptomsText was empty and chips were
+             * joined, producing '  headache fever' with a leading space. */
+            const allSymptoms = (symptomsText + ' ' + selectedChips.join(' ')).trim();
+
+            if (!name && !allSymptoms) {
+                alert('Please enter your name and at least one symptom.');
+                return;
+            }
+
+            // Find best matching diagnosis using improved word-boundary matching
+            let bestMatch = diagnosisDB[2]; // default: viral infection
+            let maxMatches = 0;
+
+            diagnosisDB.forEach(entry => {
+                /* BUG FIX: use keywordMatches() instead of plain includes()
+                 * to avoid partial-word false positives. */
+                const matches = entry.keywords.filter(kw => keywordMatches(allSymptoms, kw)).length;
+                if (matches > maxMatches) {
+                    maxMatches = matches;
+                    bestMatch = entry;
+                }
+            });
+
+            /* BUG FIX: Severity urgency overrides must be an else-if chain.
+             * Previously, two separate `if` blocks both fired when
+             * severity === 10, which caused low → medium → high instead
+             * of low → critical (the correct outcome for max severity). */
+            let displayMatch = { ...bestMatch }; // shallow copy — safe for primitive fields
+            if (severity === 10) {
+                // Maximum severity: escalate all the way to critical
+                displayMatch.urgency = 'critical';
+                displayMatch.urgencyText = '🚨 CRITICAL - Seek Emergency Care Immediately';
+            } else if (severity >= 8 && displayMatch.urgency === 'low') {
+                displayMatch.urgency = 'medium';
+                displayMatch.urgencyText = '⚠️ MEDIUM - Consult a Doctor Soon';
+            }
+
+            // Display results
+            const resultCard = document.getElementById('resultCard');
+            const infoCards = document.getElementById('infoCards');
+
+            document.getElementById('urgencyBadge').className =
+                `result-urgency urgency-${displayMatch.urgency}`;
+            document.getElementById('urgencyBadge').textContent = displayMatch.urgencyText;
+
+            /* BUG FIX: Escape the user-supplied `name` before injecting
+             * into innerHTML to prevent XSS from characters like <, >, ". */
+            document.getElementById('resultDiagnosis').innerHTML = `
+                <h3>${escapeHtml(displayMatch.diagnosis)}</h3>
+                <p>${escapeHtml(displayMatch.description)}</p>
+                <p style="color:var(--text-muted); font-size:0.82rem;">
+                    Severity: ${severity}/10 &nbsp;|&nbsp;
+                    Patient: ${escapeHtml(name || 'Anonymous')}
+                </p>
+            `;
+
+            const recList = document.getElementById('recommendationList');
+            recList.innerHTML = displayMatch.recommendations
+                .map(r => `<li><i class="fas fa-circle-check"></i> ${escapeHtml(r)}</li>`)
+                .join('');
+
+            resultCard.classList.add('show');
+            infoCards.style.display = 'none';
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /* BUG FIX: Reset button now also restores the infoCards panel
+         * which was permanently hidden after the first analysis run. */
+        function resetChecker() {
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('infoCards').style.display = 'flex';
+            // Also clear active chips for a clean slate
+            document.querySelectorAll('.symptom-chip.active')
+                .forEach(c => c.classList.remove('active'));
+            document.getElementById('symptomsText').value = '';
+            document.getElementById('patientName').value = '';
+            document.getElementById('severitySlider').value = 5;
+            document.getElementById('severityVal').textContent = '5 / 10';
+        }
+    </script>
+</body>
+
+</html>

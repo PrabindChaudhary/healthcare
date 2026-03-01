@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Doctors – MediCare AI</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .doctors-page {
+            padding: 60px 0;
+            background: var(--bg-primary);
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-family: inherit;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: var(--primary);
+            color: var(--primary-light);
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 450px;
+            margin: 0 auto 32px;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: var(--bg-card);
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-box button {
+            padding: 12px 20px;
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .doctors-big-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .doctor-big-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .doctor-big-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .doctor-big-avatar {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .doctor-big-info {
+            padding: 24px;
+        }
+
+        .doctor-big-info h3 {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .doctor-meta {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .doctor-meta span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .doctor-meta span i {
+            color: var(--accent);
+        }
+
+        .doctor-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .doctor-tag {
+            padding: 3px 10px;
+            border-radius: 100px;
+            background: rgba(139, 92, 246, 0.12);
+            color: var(--purple);
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .doctor-actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <i class="fas fa-heartbeat pulse-icon"></i>
+                <span>Medi<span class="accent">Care AI</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="symptom-checker.html">Symptom Checker</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="doctors.html" class="active">Doctors</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-outline">Login</a>
+            </div>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <span class="section-tag"><i class="fas fa-user-md"></i> Verified Professionals</span>
+            <h1>Our <span class="gradient-text">Doctors</span></h1>
+            <p>500+ verified specialists ready for in-person and online consultations</p>
+        </div>
+    </div>
+
+    <section class="doctors-page">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search doctors by name or specialty..."
+                    oninput="filterDoctors()" />
+                <button><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" onclick="filterBySpec(this,'all')">All</button>
+                <button class="filter-btn" onclick="filterBySpec(this,'General')">General</button>
+                <button class="filter-btn" onclick="filterBySpec(this,'Cardiology')">Cardiology</button>
+                <button class="filter-btn" onclick="filterBySpec(this,'Neurology')">Neurology</button>
+                <button class="filter-btn" onclick="filterBySpec(this,'Pediatrics')">Pediatrics</button>
+                <button class="filter-btn" onclick="filterBySpec(this,'Orthopedic')">Orthopedic</button>
+                <button class="filter-btn" onclick="filterBySpec(this,'Dermatology')">Dermatology</button>
+            </div>
+
+            <div class="doctors-big-grid" id="doctorsGrid">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 MediCare AI. All rights reserved.</p>
+                <p class="project-credit">🚀 <strong>Project By Prabind</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        const doctors = [
+            { name: 'Dr. Anjali Sharma', specialty: 'General', label: 'General Physician', exp: '12 years', rating: 4.9, reviews: 312, fee: 'Rs. 500', status: 'available', tags: ['Fever', 'Infection', 'Checkup'], color: 'linear-gradient(135deg,#667eea,#764ba2)' },
+            { name: 'Dr. Rajesh Thapa', specialty: 'Cardiology', label: 'Cardiologist', exp: '15 years', rating: 4.8, reviews: 278, fee: 'Rs. 800', status: 'available', tags: ['Heart', 'BP', 'ECG'], color: 'linear-gradient(135deg,#11998e,#38ef7d)' },
+            { name: 'Dr. Priya Mehta', specialty: 'Neurology', label: 'Neurologist', exp: '10 years', rating: 4.7, reviews: 195, fee: 'Rs. 900', status: 'busy', tags: ['Migraine', 'Seizure', 'Brain'], color: 'linear-gradient(135deg,#f093fb,#f5576c)' },
+            { name: 'Dr. Sanjay Poudel', specialty: 'Pediatrics', label: 'Pediatrician', exp: '8 years', rating: 4.9, reviews: 401, fee: 'Rs. 600', status: 'available', tags: ['Child', 'Vaccination', 'Growth'], color: 'linear-gradient(135deg,#4facfe,#00f2fe)' },
+            { name: 'Dr. Ramesh Gurung', specialty: 'Orthopedic', label: 'Orthopedic Surgeon', exp: '18 years', rating: 4.8, reviews: 234, fee: 'Rs. 1000', status: 'available', tags: ['Bone', 'Joint', 'Spine'], color: 'linear-gradient(135deg,#fa709a,#fee140)' },
+            { name: 'Dr. Sunita Rai', specialty: 'Dermatology', label: 'Dermatologist', exp: '6 years', rating: 4.6, reviews: 156, fee: 'Rs. 700', status: 'available', tags: ['Skin', 'Acne', 'Rash'], color: 'linear-gradient(135deg,#a18cd1,#fbc2eb)' },
+            { name: 'Dr. Bikash KC', specialty: 'General', label: 'General Physician', exp: '9 years', rating: 4.7, reviews: 189, fee: 'Rs. 450', status: 'busy', tags: ['Primary', 'Checkup', 'Flu'], color: 'linear-gradient(135deg,#0fd850,#f9f047)' },
+            { name: 'Dr. Kavita Joshi', specialty: 'Cardiology', label: 'Cardiologist', exp: '12 years', rating: 4.9, reviews: 310, fee: 'Rs. 900', status: 'available', tags: ['Heart', 'Arrhythmia', 'Cholesterol'], color: 'linear-gradient(135deg,#30cfd0,#330867)' },
+        ];
+
+        let activeFilter = 'all';
+
+        function renderDoctors(list) {
+            const grid = document.getElementById('doctorsGrid');
+            if (!list.length) {
+                grid.innerHTML = '<p style="color:var(--text-muted); text-align:center; grid-column:1/-1; padding:40px;">No doctors found matching your search.</p>';
+                return;
+            }
+            grid.innerHTML = list.map(d => `
+    <div class="doctor-big-card" data-specialty="${d.specialty}">
+      <div class="doctor-big-avatar" style="background:${d.color}">
+        <i class="fas fa-user-md"></i>
+      </div>
+      <div class="doctor-big-info">
+        <h3>${d.name}</h3>
+        <span class="specialty" style="display:inline-block;margin-bottom:8px;">${d.label}</span>
+        <div class="doctor-meta">
+          <span><i class="fas fa-star" style="color:var(--yellow)"></i> ${d.rating} (${d.reviews})</span>
+          <span><i class="fas fa-clock"></i> ${d.exp}</span>
+          <span><i class="fas fa-money-bill-wave"></i> ${d.fee}</span>
+        </div>
+        <div class="doctor-tags">
+          ${d.tags.map(t => `<span class="doctor-tag">${t}</span>`).join('')}
+        </div>
+        <span class="availability ${d.status === 'available' ? 'available' : 'busy'}" style="display:block;margin-bottom:12px;">
+          ${d.status === 'available' ? '● Available' : '● In Consultation'}
+        </span>
+        <div class="doctor-actions">
+          <a href="appointments.html" class="btn btn-primary btn-sm">Book Now</a>
+          <a href="#" class="btn btn-glass btn-sm">View Profile</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+        }
+
+        function filterBySpec(btn, spec) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = spec;
+            applyFilters();
+        }
+
+        function filterDoctors() { applyFilters(); }
+
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = doctors.filter(d => {
+                const matchSpec = activeFilter === 'all' || d.specialty === activeFilter;
+                const matchQuery = !query || d.name.toLowerCase().includes(query) || d.label.toLowerCase().includes(query) || d.tags.some(t => t.toLowerCase().includes(query));
+                return matchSpec && matchQuery;
+            });
+            renderDoctors(filtered);
+        }
+
+        renderDoctors(doctors);
+    </script>
+</body>
+
+</html>

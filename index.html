@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="MediCare AI - A SaaS online healthcare system with AI-powered symptom diagnosis, appointment booking, and doctor consultations."/>
+  <title>MediCare AI – Smart Online Healthcare System</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <i class="fas fa-heartbeat pulse-icon"></i>
+      <span>Medi<span class="accent">Care AI</span></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="symptom-checker.html">Symptom Checker</a></li>
+      <li><a href="appointments.html">Appointments</a></li>
+      <li><a href="doctors.html">Doctors</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline">Login</a>
+      <a href="register.html" class="btn btn-primary">Get Started</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-glow glow-1"></div>
+    <div class="hero-glow glow-2"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <i class="fas fa-robot"></i> AI-Powered Healthcare
+    </div>
+    <h1 class="hero-title">
+      Your Health, <br/>
+      <span class="gradient-text">Smarter &amp; Faster</span>
+    </h1>
+    <p class="hero-desc">
+      A next-generation SaaS healthcare platform that combines AI diagnosis, real-time doctor consultations, and intelligent patient prioritization — all in one place.
+    </p>
+    <div class="hero-btns">
+      <a href="symptom-checker.html" class="btn btn-primary btn-lg">
+        <i class="fas fa-stethoscope"></i> Check Symptoms Now
+      </a>
+      <a href="appointments.html" class="btn btn-glass btn-lg">
+        <i class="fas fa-calendar-check"></i> Book Appointment
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num" data-count="10000">0</span><span>+</span>
+        <span class="stat-label">Patients Helped</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="500">0</span><span>+</span>
+        <span class="stat-label">Verified Doctors</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="98">0</span><span>%</span>
+        <span class="stat-label">Accuracy Rate</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="health-card floating">
+      <div class="health-card-inner">
+        <div class="health-icon"><i class="fas fa-brain"></i></div>
+        <div class="health-info">
+          <span class="health-title">AI Diagnosis</span>
+          <span class="health-sub">Analyzing symptoms...</span>
+          <div class="health-progress">
+            <div class="progress-bar" style="width:85%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="health-card fc-2 floating-slow">
+      <div class="health-card-inner">
+        <div class="health-icon green"><i class="fas fa-user-md"></i></div>
+        <div class="health-info">
+          <span class="health-title">Dr. Sharma</span>
+          <span class="health-sub online-dot">● Available Now</span>
+        </div>
+      </div>
+    </div>
+    <div class="ecg-container">
+      <canvas id="ecgCanvas" width="300" height="80"></canvas>
+    </div>
+    <div class="urgency-badge">
+      <i class="fas fa-triangle-exclamation"></i>
+      <span>Priority: <strong>Medium</strong></span>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#0f172a"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===== FEATURES SECTION ===== -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">What We Offer</span>
+      <h2>Comprehensive Healthcare <span class="gradient-text">Features</span></h2>
+      <p>Everything you need to manage your health, all in one intelligent platform.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-delay="0">
+        <div class="feature-icon icon-blue">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h3>AI Symptom Diagnosis</h3>
+        <p>Describe your symptoms and our AI chatbot performs an intelligent preliminary diagnosis, giving you insights before you even see a doctor.</p>
+        <a href="symptom-checker.html" class="feature-link">Try it now <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="feature-card" data-delay="100">
+        <div class="feature-icon icon-teal">
+          <i class="fas fa-calendar-plus"></i>
+        </div>
+        <h3>Appointment Booking</h3>
+        <p>Seamlessly schedule appointments with verified doctors based on specialty, availability, and your location preferences.</p>
+        <a href="appointments.html" class="feature-link">Book Now <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="feature-card" data-delay="200">
+        <div class="feature-icon icon-purple">
+          <i class="fas fa-sort-amount-up"></i>
+        </div>
+        <h3>Smart Prioritization</h3>
+        <p>Our system automatically prioritizes patients by urgency and disease severity, ensuring critical cases receive immediate attention.</p>
+        <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="feature-card" data-delay="300">
+        <div class="feature-icon icon-red">
+          <i class="fas fa-video"></i>
+        </div>
+        <h3>Online Consultations</h3>
+        <p>Connect with licensed doctors via secure video calls. Get prescriptions and personalized medical advice from the comfort of home.</p>
+        <a href="doctors.html" class="feature-link">Find Doctors <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="feature-card" data-delay="400">
+        <div class="feature-icon icon-orange">
+          <i class="fas fa-file-medical"></i>
+        </div>
+        <h3>Digital Prescriptions</h3>
+        <p>Receive and store your prescriptions digitally. Access your medical history anytime, share with pharmacies instantly.</p>
+        <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="feature-card" data-delay="500">
+        <div class="feature-icon icon-green">
+          <i class="fas fa-shield-heart"></i>
+        </div>
+        <h3>Secure &amp; Private</h3>
+        <p>Your health data is encrypted and protected with enterprise-grade security. HIPAA-compliant data storage and management.</p>
+        <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Process</span>
+      <h2>How It <span class="gradient-text">Works</span></h2>
+      <p>Simple steps to get the healthcare assistance you need</p>
+    </div>
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+        <h3>Register &amp; Enter Details</h3>
+        <p>Create your patient profile with personal details and medical history.</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="fas fa-comment-medical"></i></div>
+        <h3>Describe Symptoms</h3>
+        <p>Chat with our AI bot about your symptoms for a preliminary diagnosis.</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="fas fa-list-ol"></i></div>
+        <h3>Get Prioritized</h3>
+        <p>System assigns urgency level and queues you accordingly for care.</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon"><i class="fas fa-stethoscope"></i></div>
+        <h3>Consult a Doctor</h3>
+        <p>Book or join a real-time consultation to get expert medical advice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI CHATBOT PREVIEW ===== -->
+<section class="chatbot-section">
+  <div class="container chatbot-flex">
+    <div class="chatbot-info">
+      <span class="section-tag">AI Assistant</span>
+      <h2>Meet Your <span class="gradient-text">AI Health Assistant</span></h2>
+      <p>Our intelligent chatbot is available 24/7 to analyze your symptoms, provide preliminary diagnoses, and guide you toward the right medical professional.</p>
+      <ul class="chatbot-features">
+        <li><i class="fas fa-check-circle"></i> Natural language symptom input</li>
+        <li><i class="fas fa-check-circle"></i> Instant preliminary diagnosis</li>
+        <li><i class="fas fa-check-circle"></i> Urgency level assessment</li>
+        <li><i class="fas fa-check-circle"></i> Doctor recommendation</li>
+        <li><i class="fas fa-check-circle"></i> Prevention tips &amp; remedies</li>
+      </ul>
+      <a href="symptom-checker.html" class="btn btn-primary">
+        <i class="fas fa-robot"></i> Try AI Diagnosis
+      </a>
+    </div>
+    <div class="chatbot-demo">
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+          <div class="chat-title">
+            <span>MediBot AI</span>
+            <span class="online-status">● Online</span>
+          </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot-msg">
+            <div class="msg-bubble">Hello! I'm MediBot. Please describe your symptoms and I'll help assess your condition. 🩺</div>
+          </div>
+          <div class="message user-msg">
+            <div class="msg-bubble">I have a severe headache and fever since yesterday.</div>
+          </div>
+          <div class="message bot-msg">
+            <div class="msg-bubble">I understand. How high is your fever? Do you also have a stiff neck or sensitivity to light?</div>
+          </div>
+          <div class="message user-msg">
+            <div class="msg-bubble">Fever is around 102°F. Yes, I feel light-sensitive.</div>
+          </div>
+          <div class="message bot-msg typing" id="botTyping">
+            <div class="msg-bubble"><span class="typing-dots"><span></span><span></span><span></span></span></div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" placeholder="Type your symptoms..." class="chat-input"/>
+          <button class="chat-send" id="chatSend"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOCTORS SECTION ===== -->
+<section class="doctors-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Our Team</span>
+      <h2>Meet Our <span class="gradient-text">Doctors</span></h2>
+      <p>Verified and experienced medical professionals ready to help you</p>
+    </div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <div class="doctor-avatar" style="background: linear-gradient(135deg,#667eea,#764ba2)">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="doctor-info">
+          <h3>Dr. Anjali Sharma</h3>
+          <span class="specialty">General Physician</span>
+          <div class="doctor-rating"><i class="fas fa-star"></i> 4.9 (312 reviews)</div>
+          <span class="availability available">● Available</span>
+          <a href="appointments.html" class="btn btn-sm btn-primary">Book Now</a>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <div class="doctor-avatar" style="background: linear-gradient(135deg,#11998e,#38ef7d)">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="doctor-info">
+          <h3>Dr. Rajesh Thapa</h3>
+          <span class="specialty">Cardiologist</span>
+          <div class="doctor-rating"><i class="fas fa-star"></i> 4.8 (278 reviews)</div>
+          <span class="availability available">● Available</span>
+          <a href="appointments.html" class="btn btn-sm btn-primary">Book Now</a>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <div class="doctor-avatar" style="background: linear-gradient(135deg,#f093fb,#f5576c)">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="doctor-info">
+          <h3>Dr. Priya Mehta</h3>
+          <span class="specialty">Neurologist</span>
+          <div class="doctor-rating"><i class="fas fa-star"></i> 4.7 (195 reviews)</div>
+          <span class="availability busy">● In Consultation</span>
+          <a href="appointments.html" class="btn btn-sm btn-outline">Schedule</a>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <div class="doctor-avatar" style="background: linear-gradient(135deg,#4facfe,#00f2fe)">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="doctor-info">
+          <h3>Dr. Sanjay Poudel</h3>
+          <span class="specialty">Pediatrician</span>
+          <div class="doctor-rating"><i class="fas fa-star"></i> 4.9 (401 reviews)</div>
+          <span class="availability available">● Available</span>
+          <a href="appointments.html" class="btn btn-sm btn-primary">Book Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-40">
+      <a href="doctors.html" class="btn btn-outline btn-lg">View All Doctors <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== URGENCY METER ===== -->
+<section class="urgency-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Smart Triage</span>
+      <h2>Intelligent <span class="gradient-text">Patient Prioritization</span></h2>
+      <p>Our system evaluates severity to ensure the right patients get care first</p>
+    </div>
+    <div class="urgency-grid">
+      <div class="urgency-card critical">
+        <div class="urgency-icon"><i class="fas fa-triangle-exclamation"></i></div>
+        <h3>Critical</h3>
+        <p>Chest pain, stroke symptoms, severe breathing difficulty – Immediate care required</p>
+        <div class="urgency-bar"><div class="urgency-fill" style="width:95%; background:#ef4444"></div></div>
+      </div>
+      <div class="urgency-card high">
+        <div class="urgency-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <h3>High Priority</h3>
+        <p>High fever, severe infection, acute pain – Urgent attention needed within hours</p>
+        <div class="urgency-bar"><div class="urgency-fill" style="width:70%; background:#f97316"></div></div>
+      </div>
+      <div class="urgency-card medium">
+        <div class="urgency-icon"><i class="fas fa-circle-info"></i></div>
+        <h3>Medium Priority</h3>
+        <p>Moderate symptoms like mild fever, cough – Schedule within 24-48 hours</p>
+        <div class="urgency-bar"><div class="urgency-fill" style="width:50%; background:#eab308"></div></div>
+      </div>
+      <div class="urgency-card low">
+        <div class="urgency-icon"><i class="fas fa-circle-check"></i></div>
+        <h3>Low Priority</h3>
+        <p>Minor ailments, preventive care – Routine scheduling recommended</p>
+        <div class="urgency-bar"><div class="urgency-fill" style="width:25%; background:#22c55e"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Testimonials</span>
+      <h2>What Patients <span class="gradient-text">Say</span></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+        <p>"The AI diagnosis was spot on! It identified my condition and connected me to the right specialist within minutes. Truly revolutionary."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2)">RS</div>
+          <div><strong>Raman Shrestha</strong><span>Patient, Kathmandu</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+        <p>"Booking an appointment was incredibly easy. I got connected to Dr. Sharma in under 10 minutes. This platform saved me hours of waiting."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#11998e,#38ef7d)">SP</div>
+          <div><strong>Sunita Patel</strong><span>Patient, Pokhara</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+        <p>"The urgency system is brilliant. My mother's critical condition was immediately flagged and she received care without any delay. Lifesaving!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c)">BK</div>
+          <div><strong>Bikash Karki</strong><span>Patient, Lalitpur</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA SECTION ===== -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-glow"></div>
+      <h2>Ready to Take Control of <span class="gradient-text">Your Health?</span></h2>
+      <p>Join thousands of patients who trust MediCare AI for their healthcare needs. Start your free assessment today.</p>
+      <div class="cta-btns">
+        <a href="register.html" class="btn btn-primary btn-lg">
+          <i class="fas fa-user-plus"></i> Register for Free
+        </a>
+        <a href="symptom-checker.html" class="btn btn-glass btn-lg">
+          <i class="fas fa-stethoscope"></i> Check Symptoms
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <i class="fas fa-heartbeat pulse-icon"></i>
+          <span>Medi<span class="accent">Care AI</span></span>
+        </a>
+        <p>A SaaS-based smart healthcare platform providing AI-powered diagnosis, appointment management, and online consultations.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="symptom-checker.html">Symptom Checker</a></li>
+          <li><a href="appointments.html">Appointments</a></li>
+          <li><a href="doctors.html">Doctors</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">AI Diagnosis</a></li>
+          <li><a href="#">Online Consultation</a></li>
+          <li><a href="#">Patient Prioritization</a></li>
+          <li><a href="#">Digital Prescriptions</a></li>
+          <li><a href="#">Emergency Care</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="contact-list">
+          <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+          <li><i class="fas fa-phone"></i> +977-9800000000</li>
+          <li><i class="fas fa-envelope"></i> care@medicareai.com</li>
+          <li><i class="fas fa-clock"></i> 24/7 Support Available</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 MediCare AI. All rights reserved.</p>
+      <p class="project-credit">🚀 <strong>Project By Prabind</strong></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register – MediCare AI</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at 80% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                var(--bg-primary);
+            padding: 60px 24px 40px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .auth-logo p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+        }
+
+        .auth-card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .auth-card .sub {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 24px;
+        }
+
+        .role-tabs {
+            display: flex;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            margin-bottom: 24px;
+            gap: 4px;
+        }
+
+        .role-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition-fast);
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        .role-tab.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .input-icon-wrap {
+            position: relative;
+        }
+
+        .input-icon-wrap .icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .input-icon-wrap .form-control {
+            padding-left: 40px;
+        }
+
+        .input-icon-wrap .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .pw-strength {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .pw-strength-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: all 0.3s;
+            width: 0%;
+        }
+
+        .terms-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 16px 0;
+        }
+
+        .terms-check input {
+            margin-top: 3px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .terms-check a {
+            color: var(--primary-light);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <a href="index.html" class="nav-logo" style="display:inline-flex; text-decoration:none;">
+                    <i class="fas fa-heartbeat pulse-icon"></i>
+                    <span>Medi<span class="accent">Care AI</span></span>
+                </a>
+                <p>Join thousands using smarter healthcare</p>
+            </div>
+
+            <div class="auth-card">
+                <h2>Create Account</h2>
+                <p class="sub">Get started with your free healthcare account</p>
+
+                <div class="role-tabs">
+                    <button class="role-tab active" onclick="setRole(this,'Patient')"><i class="fas fa-user"></i>
+                        Patient</button>
+                    <button class="role-tab" onclick="setRole(this,'Doctor')"><i class="fas fa-user-md"></i>
+                        Doctor</button>
+                </div>
+
+                <div id="regAlert"></div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-user icon"></i>
+                            <input type="text" id="firstName" class="form-control" placeholder="First name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" id="lastName" class="form-control" placeholder="Last name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-envelope icon"></i>
+                        <input type="email" id="regEmail" class="form-control" placeholder="your@email.com" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-phone icon"></i>
+                        <input type="tel" id="regPhone" class="form-control" placeholder="+977-98XXXXXXXX" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="regDob" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="regGender" class="form-control">
+                            <option value="">Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="doctorFields" style="display:none;">
+                    <div class="form-group">
+                        <label>Medical License Number</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-id-badge icon"></i>
+                            <input type="text" id="licenseNum" class="form-control" placeholder="NMC-XXXXX" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Specialty</label>
+                        <select id="docSpecialty" class="form-control">
+                            <option value="">Select Specialty</option>
+                            <option>General Physician</option>
+                            <option>Cardiologist</option>
+                            <option>Neurologist</option>
+                            <option>Pediatrician</option>
+                            <option>Dermatologist</option>
+                            <option>Orthopedic Surgeon</option>
+                            <option>Psychiatrist</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" id="regPw" class="form-control" placeholder="Create a strong password"
+                            oninput="checkStrength(this.value)" />
+                        <span class="toggle-pw" onclick="togglePassword('regPw', this)"><i
+                                class="fas fa-eye"></i></span>
+                    </div>
+                    <div class="pw-strength">
+                        <div class="pw-strength-fill" id="pwStrength"></div>
+                    </div>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" id="pwStrengthText"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" id="regPwConfirm" class="form-control"
+                            placeholder="Confirm your password" />
+                    </div>
+                </div>
+
+                <div class="terms-check">
+                    <input type="checkbox" id="termsCheck" />
+                    <label for="termsCheck">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
+                            Policy</a></label>
+                </div>
+
+                <button class="btn btn-primary btn-lg" onclick="handleRegister()"
+                    style="width:100%; justify-content:center;">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </div>
+
+            <p class="auth-footer">
+                Already have an account? <a href="login.html">Sign in</a>
+            </p>
+            <p style="text-align:center; color:var(--text-muted); font-size:0.75rem; margin-top:8px;">
+                🚀 Project By Prabind
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'Patient';
+
+        function setRole(btn, role) {
+            document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            currentRole = role;
+            document.getElementById('doctorFields').style.display = (role === 'Doctor') ? 'block' : 'none';
+        }
+
+        function togglePassword(id, icon) {
+            const input = document.getElementById(id);
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            icon.innerHTML = `<i class="fas fa-eye${isText ? '' : '-slash'}"></i>`;
+        }
+
+        function checkStrength(val) {
+            const fill = document.getElementById('pwStrength');
+            const text = document.getElementById('pwStrengthText');
+            let strength = 0;
+            if (val.length >= 8) strength++;
+            if (/[A-Z]/.test(val)) strength++;
+            if (/[0-9]/.test(val)) strength++;
+            if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+            const levels = [
+                { w: '0%', c: 'transparent', t: '' },
+                { w: '25%', c: 'var(--red)', t: 'Weak' },
+                { w: '50%', c: 'var(--orange)', t: 'Fair' },
+                { w: '75%', c: 'var(--yellow)', t: 'Good' },
+                { w: '100%', c: 'var(--green)', t: 'Strong' }
+            ];
+
+            fill.style.width = levels[strength].w;
+            fill.style.background = levels[strength].c;
+            text.textContent = strength > 0 ? 'Password strength: ' + levels[strength].t : '';
+            text.style.color = levels[strength].c;
+        }
+
+        function handleRegister() {
+            const first = document.getElementById('firstName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pw = document.getElementById('regPw').value;
+            const pwc = document.getElementById('regPwConfirm').value;
+            const terms = document.getElementById('termsCheck').checked;
+            const alertBox = document.getElementById('regAlert');
+
+            if (!first || !email || !pw) {
+                alertBox.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Please fill all required fields.</div>';
+                return;
+            }
+
+            if (pw !== pwc) {
+                alertBox.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Passwords do not match.</div>';
+                return;
+            }
+
+            if (!terms) {
+                alertBox.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Please accept the terms and conditions.</div>';
+                return;
+            }
+
+            alertBox.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Account created successfully! Redirecting to login...</div>';
+
+            setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+        }
+    </script>
+</body>
+
+</html>

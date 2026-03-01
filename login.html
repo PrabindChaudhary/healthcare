@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login – MediCare AI</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+                var(--bg-primary);
+            padding: 100px 24px 40px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-logo .nav-logo {
+            font-size: 1.8rem;
+            justify-content: center;
+        }
+
+        .auth-logo p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+        }
+
+        .auth-card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .auth-card .sub {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 28px;
+        }
+
+        .role-tabs {
+            display: flex;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            margin-bottom: 24px;
+            gap: 4px;
+        }
+
+        .role-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition-fast);
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        .role-tab.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .input-icon-wrap {
+            position: relative;
+        }
+
+        .input-icon-wrap .icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .input-icon-wrap .form-control {
+            padding-left: 40px;
+        }
+
+        .input-icon-wrap .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            color: var(--primary-light);
+            font-size: 0.82rem;
+            margin-top: -12px;
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 20px 0;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            content: '';
+        }
+
+        .social-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-family: inherit;
+            text-decoration: none;
+        }
+
+        .social-btn:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="auth-container">
+
+            <div class="auth-logo">
+                <a href="index.html" class="nav-logo" style="display:inline-flex; text-decoration:none;">
+                    <i class="fas fa-heartbeat pulse-icon"></i>
+                    <span>Medi<span class="accent">Care AI</span></span>
+                </a>
+                <p>Your intelligent healthcare companion</p>
+            </div>
+
+            <div class="auth-card">
+                <h2>Welcome Back</h2>
+                <p class="sub">Sign in to access your healthcare dashboard</p>
+
+                <div class="role-tabs">
+                    <button class="role-tab active" onclick="setRole(this,'Patient')"><i class="fas fa-user"></i>
+                        Patient</button>
+                    <button class="role-tab" onclick="setRole(this,'Doctor')"><i class="fas fa-user-md"></i>
+                        Doctor</button>
+                    <button class="role-tab" onclick="setRole(this,'Admin')"><i class="fas fa-shield-alt"></i>
+                        Admin</button>
+                </div>
+
+                <div id="loginAlert"></div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-envelope icon"></i>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="your@email.com" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" id="loginPw" class="form-control" placeholder="Enter your password" />
+                        <span class="toggle-pw" onclick="togglePassword('loginPw', this)"><i
+                                class="fas fa-eye"></i></span>
+                    </div>
+                </div>
+
+                <a href="#" class="forgot-link">Forgot password?</a>
+
+                <button class="btn btn-primary btn-lg" onclick="handleLogin()"
+                    style="width:100%; justify-content:center;">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+
+                <div class="divider">or continue with</div>
+
+                <div class="social-btns">
+                    <a href="#" class="social-btn"><i class="fab fa-google" style="color:#ea4335"></i> Google</a>
+                    <a href="#" class="social-btn"><i class="fab fa-facebook" style="color:#1877f2"></i> Facebook</a>
+                </div>
+            </div>
+
+            <p class="auth-footer">
+                Don't have an account? <a href="register.html">Register now</a>
+            </p>
+            <p style="text-align:center; color:var(--text-muted); font-size:0.75rem; margin-top:8px;">
+                🚀 Project By Prabind
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'Patient';
+
+        function setRole(btn, role) {
+            document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            currentRole = role;
+        }
+
+        function togglePassword(id, icon) {
+            const input = document.getElementById(id);
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            icon.innerHTML = `<i class="fas fa-eye${isText ? '' : '-slash'}"></i>`;
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pw = document.getElementById('loginPw').value.trim();
+            const alertBox = document.getElementById('loginAlert');
+
+            if (!email || !pw) {
+                alertBox.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Please fill all fields.</div>';
+                return;
+            }
+
+            alertBox.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Logging in as ' + currentRole + '... Redirecting.</div>';
+
+            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+        }
+    </script>
+</body>
+
+</html>
